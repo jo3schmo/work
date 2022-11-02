@@ -1,0 +1,80 @@
+---
+title: "bike_stuff"
+author: "Joseph White"
+date: "10/27/22"
+output: github_document
+---
+
+```{r}
+library(tidyverse) 
+library(dsbox)
+library(lubridate)
+library(ggplot2)
+library(janitor)
+```
+
+```{r}
+bike_data <- read_csv("202209-capitalbikeshare-tripdata.csv") %>% clean_names()
+```
+
+```{r}
+bike_data_m <- bike_data %>%
+  filter(member_casual == "member")
+
+bike_data_c <- bike_data %>%
+  filter(member_casual == "casual")
+
+ggplot(bike_data_m, mapping = aes(x = start_lng, y = start_lat)) +
+  geom_point()
+
+ggplot(bike_data_c, mapping = aes(x = start_lng, y = start_lat)) +
+  geom_point()
+```
+## bikes out per day ish
+```{r}
+bike_data_use <- bike_data %>% 
+  select(started_at) %>%
+  separate(started_at, c("date", "time"), " ") %>%
+  separate(time, c("hour","minute","second"), ":") %>%
+  mutate(minu = as.numeric(hour)*60 + as.numeric(minute))%>%
+  separate(date, c("year","month","day"), "-") %>%
+  filter(day == "01")
+```
+
+
+# plot
+```{r}
+ggplot(bike_data_use, aes(x= minu)) + geom_dotplot(binwidth = 5)
+```
+
+## class work
+```{r}
+bike_data_class <- bike_data %>%
+  mutate(duration = (ended_at - started_at)/60,
+         hour_of_day = hour(started_at),
+         day_of_week = wday(started_at, label = T))
+```
+
+## visu
+```{r}
+bike_data_class %>%
+  filter(duration < 100, duration > 0) %>%
+  ggplot(aes(x = duration)) + geom_histogram(bins = 300) + facet_wrap(~day_of_week)
+```
+
+## riders v time
+```{r}
+df <- bike_data_class %>%
+  filter(mday(started_at) == 3) %>%
+  select(start = started_at, end = ended_at) %>%
+  pivot_longer(start:end) %>%
+  arrange(value) %>%
+  mutate(nu = case_when(name == "start" ~ 1, name == "end" ~ -1)) %>%
+  mutate(bike_out = cumsum(nu)) 
+```
+
+## plot
+```{r}
+ggplot(df, aes(value, bike_out)) + geom_step()
+```
+

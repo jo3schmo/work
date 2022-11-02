@@ -65,7 +65,8 @@ bike_data_class %>%
 ## riders v time
 ```{r}
 df <- bike_data_class %>%
-  filter(mday(started_at) == 3) %>%
+ # filter(mday(started_at) == 3) %>%
+  filter(month(started_at)==9, month(ended_at)==9) %>%
   select(start = started_at, end = ended_at) %>%
   pivot_longer(start:end) %>%
   arrange(value) %>%
@@ -75,6 +76,24 @@ df <- bike_data_class %>%
 
 ## plot
 ```{r}
-ggplot(df, aes(value, bike_out)) + geom_step()
+ggplot(df, aes(value, bike_out)) + geom_step() + facet_wrap(~mday(value), scales = "free_x", ncol = 7)
+```
+
+## rider type
+```{r}
+df1 <- bike_data_class %>%
+  filter(month(started_at)==9, month(ended_at)==9) %>%
+  select(member_casual, start = started_at, end = ended_at) %>%
+  pivot_longer(start:end) %>%
+  arrange(value) %>%
+  mutate(nu = case_when(name == "start" ~ 1, name == "end" ~ -1)) %>%
+  group_by(member_casual) %>%
+  mutate(bike_out = cumsum(nu))
+```
+
+## plot
+```{r}
+ggplot(df1, aes(value, nu, color = member_casual)) + geom_step() +
+  facet_wrap(~mday(value),scales = "free_x",ncol = 7)
 ```
 

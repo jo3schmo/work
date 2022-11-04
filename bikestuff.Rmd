@@ -97,3 +97,15 @@ ggplot(df1, aes(value, nu, color = member_casual)) + geom_step() +
   facet_wrap(~mday(value),scales = "free_x",ncol = 7)
 ```
 
+## 11/3/22
+```{r}
+df_2 <- bike_data %>%
+  select(started_at, ended_at, member_casual) %>% 
+  mutate(int = as.numeric(started_at - ended_at)  * -1 / 60)
+```
+
+## plot
+```{r}
+ggplot( df_2, aes(int)) + geom_histogram() + facet_wrap(~member_casual)
+```
+

@@ -11,6 +11,9 @@ library(dsbox)
 library(lubridate)
 library(ggplot2)
 library(janitor)
+
+install.packages("gbfs")
+library(gbfs)
 ```
 
 ```{r}
@@ -100,12 +103,25 @@ ggplot(df1, aes(value, nu, color = member_casual)) + geom_step() +
 ## 11/3/22
 ```{r}
 df_2 <- bike_data %>%
+  filter(month(started_at)==9, month(ended_at)==9) %>%
   select(started_at, ended_at, member_casual) %>% 
   mutate(int = as.numeric(started_at - ended_at)  * -1 / 60)
 ```
 
 ## plot
 ```{r}
-ggplot( df_2, aes(int)) + geom_histogram() + facet_wrap(~member_casual)
+abc <- ggplot( df_2, aes(int)) + geom_histogram() + facet_wrap(~mday(started_at),scales = "free_x",ncol = 7)
+abc + xlim(0, 100)
 ```
 
+## using gbfs
+```{r}
+station_info <- get_station_information("https://gbfs.biketownpdx.com/gbfs/gbfs.json")
+station_staus <- get_station_status("https://gbfs.biketownpdx.com/gbfs/gbfs.json")
+
+station <- merge(station_info, station_staus, "station_id") %>%
+  select(station_id, address, name, lon, lat)
+
+```
+
+explore this

@@ -5,12 +5,14 @@ date: "10/27/22"
 output: github_document
 ---
 
+##Load Packages
 ```{r}
 library(tidyverse) 
 library(dsbox)
 library(lubridate)
 library(ggplot2)
 library(janitor)
+library(here)
 
 install.packages("gbfs")
 library(gbfs)
@@ -114,14 +116,49 @@ abc <- ggplot( df_2, aes(int)) + geom_histogram() + facet_wrap(~mday(started_at)
 abc + xlim(0, 100)
 ```
 
+##11/4/22 Class Work
+
 ## using gbfs
 ```{r}
 station_info <- get_station_information("https://gbfs.biketownpdx.com/gbfs/gbfs.json")
-station_staus <- get_station_status("https://gbfs.biketownpdx.com/gbfs/gbfs.json")
+station_status <- get_station_status("https://gbfs.biketownpdx.com/gbfs/gbfs.json")
 
-station <- merge(station_info, station_staus, "station_id") %>%
+station <- merge(station_info, station_status, "station_id") %>%
   select(station_id, address, name, lon, lat)
 
 ```
 
-explore this
+##Explore this
+
+##Data Load
+```{r}
+df_cities=get_gbfs_cities()
+```
+
+##Looking up in the df_cities list, found capital bikeshare code as "cabi".
+
+```{r}
+cabi_free=get_free_bike_status("cabi")
+```
+
+```{r}
+cabi_free %>% ggplot(aes(x=lon,y=lat)) + geom_point()
+```
+
+```{r}
+get_free_bike_status("cabi") %>% ggplot(aes(x=lon,y=lat)) + geom_point()
+```
+
+```{r}
+df_cities=get_gbfs_cities()
+```
+
+```{r}
+cabidf_stations = get_station_information("cabi")
+```
+
+```{r}
+cabidf_stations %>% ggplot(aes(x=lon, y=lat)) + geom_point()
+```
+
+

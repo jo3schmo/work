@@ -1,0 +1,17 @@
+---
+title: "11-9-22-joey"
+author: "Joseph White"
+date: "11/9/22"
+output: github_document
+---
+
+##Load Packages
+```{r}
+library(tidyverse) 
+library(dsbox)
+library(lubridate)
+library(ggplot2)
+library(janitor)
+library(here)
+```
+

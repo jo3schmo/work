@@ -229,5 +229,13 @@ tm_shape(df2)+tm_polygons(c("adj_median_income","covid_rate","black_perc"))
 ```{r}
 df2 %>% filter(objectid!=30) %>% tm_shape()+tm_polygons(c("adj_median_income","covid_rate","black_perc"),alpha=.4)
 ```
+#find where people ride bikes (bikes started in each 'district')
+```{r}
+df_main <- read_csv("202209-capitalbikeshare-tripdata.csv")
 
+
+
+df_use <- df_main %>%
+  select(started_at, ended_at, start_lat, end_lat, start_lng, end_lng)
+```
 

@@ -31,6 +31,11 @@ library(tidyverse)
 library(janitor)
 library(lubridate) # because we will probably see some dates
 library(here) # a package I haven't taught you about before that doesn't do much, but ....
+library(rnaturalearth)
+library(WDI)
+library(tigris)
+library(rgdal)
+library(sp)
 ```
 
 Some additional packages focused on today's work:
@@ -231,11 +236,41 @@ df2 %>% filter(objectid!=30) %>% tm_shape()+tm_polygons(c("adj_median_income","c
 ```
 #find where people ride bikes (bikes started in each 'district')
 ```{r}
-df_main <- read_csv("202209-capitalbikeshare-tripdata.csv")
-
-
-
-df_use <- df_main %>%
-  select(started_at, ended_at, start_lat, end_lat, start_lng, end_lng)
+bike_data <- read_csv("202209-capitalbikeshare-tripdata.csv") %>% clean_names()
 ```
+```{r}
+ggplot(bike_data, mapping = aes(x = start_lng, y = start_lat)) +
+  geom_point()
+```
+```{r}
+bike_data_sf <- bike_data %>%
+  mutate_at(vars(start_lat, start_lng), as.numeric) %>%
+  st_as_sf(
+    coords = c("start_lat", "start_lng"), 
+    agr = "constant",
+    crs = "4326"
+  ) %>%
+  rename(point_location = 'geometry') %>%
+  sample_n(1000)
+```
+st_set_crs(4326) %>% st_transform(4326)
+
+, 
+    agr = "constant",
+    crs = "4326"
+  ) 
+  
+```{r}
+st_crs(bike_data_sf)
+st_crs(neigh2)
+```
+```{r}
+st_crs(bike_data_sf) <- 4326
+```
+  
+  
+```{r}
+df_plz = st_join(neigh2, bike_data_sf,join = st_within)
+```
+
 

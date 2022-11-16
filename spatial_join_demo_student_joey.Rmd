@@ -238,10 +238,7 @@ df2 %>% filter(objectid!=30) %>% tm_shape()+tm_polygons(c("adj_median_income","c
 ```{r}
 bike_data <- read_csv("202209-capitalbikeshare-tripdata.csv") %>% clean_names()
 ```
-```{r}
-ggplot(bike_data, mapping = aes(x = start_lng, y = start_lat)) +
-  geom_point()
-```
+
 ```{r}
 bike_data_sf <- bike_data %>%
   mutate_at(vars(start_lat, start_lng), as.numeric) %>%
@@ -252,23 +249,16 @@ bike_data_sf <- bike_data %>%
   ) %>%
   sample_n(1000)
 ```
-bike_data_sf <- bike_data %>%
-  mutate_at(vars(start_lat, start_lng), as.numeric) %>%
-  st_as_sf(
-    coords = c("start_lat", "start_lng"), 
-    agr = "constant",
-    crs = "4326"
-  ) %>%
-  rename(point_location = 'geometry') %>%
-  sample_n(1000)
+
 ```{r}
 st_crs(bike_data_sf)
 st_crs(neigh2)
 ```
+
 ```{r}
 st_crs(bike_data_sf) <- 4326
 ```
-  
+
 ```{r}
 bike_data_sf_1 <- bike_data_sf %>%
   select(geometry) %>%
@@ -278,11 +268,13 @@ neigh2_1 <- neigh2 %>%
   select(geometry)
 ```
   
-  
 ```{r}
 df_plz = st_join(bike_data_sf_1, neigh2_1, join = st_within)
 
-df_bikes_count <- count(as_tibble(df_plz), )
+#df_bikes_count <- count(as_tibble(df_plz), )
 ```
 
 
+https://dw-rowlands.github.io/Job_Density_and_Commutes/Job_Density_and_Commutes.html
+
+https://walker-data.com/census-r/index.html

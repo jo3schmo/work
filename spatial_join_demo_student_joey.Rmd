@@ -250,16 +250,17 @@ bike_data_sf <- bike_data %>%
     agr = "constant",
     crs = "4326"
   ) %>%
-  rename(point_location = 'geometry') %>%
   sample_n(1000)
 ```
-st_set_crs(4326) %>% st_transform(4326)
-
-, 
+bike_data_sf <- bike_data %>%
+  mutate_at(vars(start_lat, start_lng), as.numeric) %>%
+  st_as_sf(
+    coords = c("start_lat", "start_lng"), 
     agr = "constant",
     crs = "4326"
-  ) 
-  
+  ) %>%
+  rename(point_location = 'geometry') %>%
+  sample_n(1000)
 ```{r}
 st_crs(bike_data_sf)
 st_crs(neigh2)
@@ -268,9 +269,20 @@ st_crs(neigh2)
 st_crs(bike_data_sf) <- 4326
 ```
   
+```{r}
+bike_data_sf_1 <- bike_data_sf %>%
+  select(geometry) %>%
+  rename(geom_points = geometry)
+
+neigh2_1 <- neigh2 %>%
+  select(geometry)
+```
+  
   
 ```{r}
-df_plz = st_join(neigh2, bike_data_sf,join = st_within)
+df_plz = st_join(bike_data_sf_1, neigh2_1, join = st_within)
+
+df_bikes_count <- count(as_tibble(df_plz), )
 ```
 
 

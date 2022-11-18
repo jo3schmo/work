@@ -31,6 +31,9 @@ library(tidyverse)
 library(janitor)
 library(lubridate) # because we will probably see some dates
 library(here) # a package I haven't taught you about before that doesn't do much, but ....
+library(sf)
+library(tmap)
+library(tidycensus)
 ```
 
 Some additional packages focused on today's work:
@@ -229,5 +232,8 @@ tm_shape(df2)+tm_polygons(c("adj_median_income","covid_rate","black_perc"))
 ```{r}
 df2 %>% filter(objectid!=30) %>% tm_shape()+tm_polygons(c("adj_median_income","covid_rate","black_perc"),alpha=.4)
 ```
+
+
+
 
 

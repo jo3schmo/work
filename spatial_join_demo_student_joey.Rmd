@@ -278,3 +278,9 @@ df_plz = st_join(bike_data_sf_1, neigh2_1, join = st_within)
 https://dw-rowlands.github.io/Job_Density_and_Commutes/Job_Density_and_Commutes.html
 
 https://walker-data.com/census-r/index.html
+
+
+What other interesting questions
+- is peak in bike data actually people going to work or tourist?
+- are casual riders in the more touristy areas?
+open data dc, tourist data, reverse geo coding to find location of monuments :):

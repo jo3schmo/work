@@ -22,7 +22,6 @@ library(ggplot2)
 library(gbfs)
 library(dplyr)
 library(stringr)
-library(nabor)
 ```
 
 
@@ -31,7 +30,9 @@ bikeshare = read_csv(here("202209-capitalbikeshare-tripdata.csv")) %>%
   clean_names() %>% select(ride_id, start_lat, start_lng, end_lat, end_lng) %>%
   filter(!is.na(end_lat), !is.na(end_lng))
 
-census_api_key("74bc918a78c720321d756d915a6094c8b101b31f")
+##census_api_key("74bc918a78c720321d756d915a6094c8b101b31f")
+
+census_api_key("00b78ce52463bf386a260d23ec58edb622e6d3ac")
 
 census=get_acs(geography = "tract",
                variables=c("pop"="B01001_001"),

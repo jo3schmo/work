@@ -126,7 +126,7 @@ neigh2=left_join(neigh,df_cases,by=c("code"))
 
 tmap_mode("view")
 
-tm_shape(neigh2) +tm_polygons("total_positives",alpha=.5)
+tm_shape(neigh2) + tm_polygons("total_positives",alpha=.5)
 ```
 
 
